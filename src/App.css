@@ -1,0 +1,241 @@
+@import url("https://fonts.googleapis.com/css2?family=Karla&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Karla", sans-serif;
+  background-color: #282e38;
+  color: #f7f7eb;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+.link-menu {
+  width: 90%;
+  max-width: 700px;
+  margin: auto;
+  text-align: right;
+}
+
+.link-menu a {
+  font-size: 1.2rem;
+  text-decoration: underline;
+  color: #f2f2f2;
+  line-height: 2rem;
+  padding-right: 10px;
+}
+
+.form-text {
+  font-size: 1rem;
+  min-width: 80%;
+  height: 2.5rem;
+  border-radius: 10px;
+  padding: 2px 5px;
+  border: 1px solid #ccc;
+  outline: none;
+  color: #333;
+  font-weight: 500;
+}
+
+.form-text:disabled {
+  background-color: #1f252d;
+  border: 1px solid #7887a1;
+  color: #999;
+}
+
+.btn {
+  font-size: 1.1rem;
+  min-width: 100px;
+  min-height: 40px;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #329288;
+  color: #329288;
+  cursor: pointer;
+  background-color: #323a46;
+  outline: none;
+  text-align: center;
+  transition: color 0.3s, background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #329288;
+  color: #f7f7eb;
+  border: none;
+}
+
+.btn-delete {
+  border: 1px solid #e62e00;
+  color: #e62e00;
+}
+
+.btn-delete:hover {
+  background-color: #cc2900;
+  color: #f7f7eb;
+  border: none;
+}
+
+.loading {
+  display: none;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.loading.show {
+  display: block;
+}
+
+.loading-content {
+  display: inline-block;
+  position: relative;
+  top: 50vh;
+  left: 50vw;
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+.loading-content p {
+  font-size: 1.7rem;
+  margin-top: 1rem;
+}
+
+.loading-content i {
+  animation: rotate-forever 1.5s ease-out infinite;
+}
+
+.app {
+  width: 90%;
+  max-width: 700px;
+  margin: 100px auto 0 auto;
+  padding: 1.3rem;
+  background-color: #323a46;
+  border-radius: 1rem;
+  border: 2px solid #282d37;
+  box-shadow: 2px 3px 3px #282d37;
+}
+
+.app-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.new-playlist-create form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 200px;
+}
+
+/* Playlists */
+
+.playlist .btn-reload{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  margin: auto;
+  margin-top: 1.4rem;
+}
+
+.playlist .btn-reload i {
+  margin-right: .4rem;
+}
+
+.playlist-items{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.playlist-item {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 5px;
+  border-bottom: 1px solid #3b4452;
+}
+
+.playlist-item .num-video {
+  color: #9ba3ab;
+  font-size: 1rem;
+}
+
+.playlist-item .playlist-item-id {
+  color: #9ba3ab;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+.playlist-item .info {
+  margin-right: auto;
+}
+
+.playlist-item .btn {
+  margin-left: 1rem;
+}
+
+/* End playlists */
+
+/* Menu */
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.menu li {
+  width: 100%;
+  text-align: center;
+  margin-top: .8rem;
+  border: 1px solid #5aa1c2;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color .5s;
+}
+
+.menu li:hover {
+  /* border: 1px solid #f7f7eb; */
+  background-color: #5aa1c2;
+}
+
+.menu li:hover a {
+  color: #f2f2f2;
+
+}
+
+.menu a {
+  display: inline-block;
+  padding: 1rem;
+  width: 100%;
+  font-size: 1.1rem;
+  color: #5aa1c2;
+  transition: color .5s;
+}
+
+
+/*  */
+
+@keyframes rotate-forever {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
