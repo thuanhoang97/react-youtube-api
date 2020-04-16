@@ -2,8 +2,7 @@ const gapi = window.gapi;
 
 const youtubeApi = {
   API_REST: 'https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest',
-  clientId: '',
-  didInit: false,
+  profile: null,
   _beforeCallAPICb: null,
   _afterCallAPICb: null,
 
@@ -17,7 +16,7 @@ const youtubeApi = {
 
     gapi.load("client:auth2", () => {
       gapi.auth2.init({ client_id: clientId }).then(() => {
-        this.clientId = clientId;
+        localStorage.setItem('clientId', clientId);
 
         console.log('Loading API...');
         if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
@@ -25,7 +24,11 @@ const youtubeApi = {
         } else {
           gapi.auth2.getAuthInstance()
             .signIn({scope: "https://www.googleapis.com/auth/youtube"})
-            .then(() => this.loadAPI(onSuccess));
+            .then(() => {
+              localStorage.setItem('clientId', clientId);
+              console.log("set me");
+              this.loadAPI(onSuccess);
+            });
         }
       });
     });
@@ -35,9 +38,13 @@ const youtubeApi = {
     gapi.client.load(this.API_REST)
     .then(() => {
       console.log('Loaded GAPI client for API');
-      this.didInit = true;
+      this.profile = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile();
+
       this._afterCallAPICb && this._afterCallAPICb();
       onSuccess && onSuccess();
+
+      // console.log(this.profile.getName());
+      // console.log(this.profile.getImageUrl());
     })
     .catch((err) => {
       this._afterCallAPICb && this._afterCallAPICb();
