@@ -15,7 +15,11 @@ const youtubeApi = {
     this._beforeCallAPICb && this._beforeCallAPICb();
 
     gapi.load("client:auth2", () => {
-      gapi.auth2.init({ client_id: clientId }).then(() => {
+      const config = {
+        client_id: clientId,
+        scope: "https://www.googleapis.com/auth/youtube"
+      };
+      gapi.auth2.init(config).then(() => {
         localStorage.setItem('clientId', clientId);
 
         console.log('Loading API...');
@@ -23,7 +27,7 @@ const youtubeApi = {
           this.loadAPI(onSuccess);
         } else {
           gapi.auth2.getAuthInstance()
-            .signIn({scope: "https://www.googleapis.com/auth/youtube"})
+            .signIn()
             .then(() => {
               localStorage.setItem('clientId', clientId);
               console.log("set me");
@@ -42,9 +46,6 @@ const youtubeApi = {
 
       this._afterCallAPICb && this._afterCallAPICb();
       onSuccess && onSuccess();
-
-      // console.log(this.profile.getName());
-      // console.log(this.profile.getImageUrl());
     })
     .catch((err) => {
       this._afterCallAPICb && this._afterCallAPICb();
@@ -94,6 +95,7 @@ const youtubeApi = {
         part: "id",
         maxResults: Math.min(maxResults, 50),
         q: key,
+        type: 'video'
       })
       .then((res) => {
         const items = JSON.parse(res.body).items;
@@ -111,10 +113,13 @@ const youtubeApi = {
   createPlaylist(title, cb) {
     return gapi.client.youtube.playlists
       .insert({
-        part: "snippet",
+        part: 'snippet, status',
         snippet: {
           title: title,
         },
+        status: {
+          privacyStatus: 'public',
+        }
       })
       .then((resData) => {
         const data = JSON.parse(resData.body);
@@ -129,45 +134,50 @@ const youtubeApi = {
       });
   },
 
-  addVideoToPlayList (playlistId, video) {
+  addVideoToPlayList (playlistId, video, params) {
     return gapi.client.youtube.playlistItems.insert({
       part: 'snippet',
       'snippet': {
         'playlistId': playlistId,
         'resourceId': video,
+        'position': params.position,
       }
     });
   },
 
-  addVideosToPlaylist(playlistId, videos) {
+  addVideosToPlaylist(playlistId, videos, params) {
     if (videos.length === 0) {
       this._afterCallAPICb && this._afterCallAPICb();
       return;
     };
 
     const video = videos[0];
-    this.addVideoToPlayList(playlistId, video)
+    this.addVideoToPlayList(playlistId, video, params)
       .then(() => {
-          console.log(`Inserted video ${JSON.stringify(video)} into playlist ${playlistId}`);
-          this.addVideosToPlaylist(playlistId, videos.slice(1));
+        console.log(`Inserted video: ${JSON.stringify(video)}`);
       })
       .catch((err) => {
-        this.addVideosToPlaylist(playlistId, videos.slice(1));
-        console.log(`Failed insert video ${JSON.stringify(video)} to playlist ${playlistId}, err: ${err}`);
+        console.error(`Inserted failed video: ${JSON.stringify(video)}`);
+      })
+      .then(() => {
+        if (params.position) {
+          params.position += 1;
+        }
+        this.addVideosToPlaylist(playlistId, videos.slice(1), params);
       });
   },
 
-  newPlaylist(title, key, numItem) {
+  newPlaylist(title, key, params) {
     this._beforeCallAPICb && this._beforeCallAPICb();
     this.createPlaylist(title, (newPlaylist) => {
-      this.addVideosToPlaylistByKeyword(newPlaylist.id, key, numItem);
+      this.addVideosToPlaylistByKeyword(newPlaylist.id, key, params);
     });
   },
 
-  addVideosToPlaylistByKeyword (playlistId, key, numItem) {
-    youtubeApi.search(key, numItem).then((items) => {
+  addVideosToPlaylistByKeyword (playlistId, key, params) {
+    youtubeApi.search(key, params.numVideo).then((items) => {
       this._beforeCallAPICb && this._beforeCallAPICb();
-      // this.addVideosToPlaylist(playlistId, items);
+      this.addVideosToPlaylist(playlistId, items, params);
     });
   }
 };

@@ -139,7 +139,31 @@ a {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  height: 200px;
+  min-height: 200px;
+}
+
+.new-playlist-create .field {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 60px;
+}
+
+.new-playlist-create .field label {
+  font-size: 1.1rem;
+  margin-right: auto;
+}
+
+.new-playlist-create .app-title {
+  margin-bottom: .5rem;
+}
+
+.new-playlist-create .error {
+  color: red;
+  font-size: 1.2rem;
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
 /* Playlists */

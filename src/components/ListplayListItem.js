@@ -1,22 +1,38 @@
 import React from "react";
+import youtubeApi from "../youtubeApi";
+
 import PlaylistItem from "./PlaylistItem";
 import FormCreateNewPlaylist from "../components/FormCreateNewPlaylist";
 
 export default class ListPlayListItem extends React.Component {
   state = {
     _showForm: false,
-    titleItemInsert: ''
+    itemInsert: '',
+    playlist: {
+      items: [],
+      nextToken: ""
+    },
   };
 
   componentDidMount() {
-    console.log('Hello world');
-    console.log(this.state._showForm);
+    this.loadPlayLists();
   }
 
-  onInsertItem = (title) => {
+  loadPlayLists = () => {
+    youtubeApi.getPlayList().then((data) => {
+      this.setState({
+        playlist: {
+          items: data.items,
+          nextToken: data.nextToken
+        }
+      });
+    });
+	};
+
+  onInsertItem = (item) => {
     this.setState({
       _showForm: true,
-      titleItemInsert: title,
+      itemInsert: item,
     });
   }
 
@@ -25,14 +41,13 @@ export default class ListPlayListItem extends React.Component {
       <div>
         {this.state._showForm ? (
           <FormCreateNewPlaylist 
-            onCreateNewPlaylist={this.props.onCreateNewPlaylist} 
-            title={this.state.titleItemInsert}
+            playlist={this.state.itemInsert}
           />
         ) : (
           <div className="playlist">
             <h3 className="app-title">Current Playlist</h3>
             <div className="playlist-items">
-              {this.props.items.map((item, idx) => (
+              {this.state.playlist.items.map((item, idx) => (
                 <PlaylistItem
                   data={item}
                   key={item.id}
@@ -41,7 +56,7 @@ export default class ListPlayListItem extends React.Component {
                 />
               ))}
             </div>
-            <div className="btn btn-reload" onClick={this.props.loadPlaylists}>
+            <div className="btn btn-reload">
               <i className="fas fa-sync-alt"></i> Refresh
             </div>
           </div>

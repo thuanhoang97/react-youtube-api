@@ -3,6 +3,7 @@ import React from "react";
 
 export default function PlaylistItem(props) {
   const data = props.data;
+
   return (
     <div className="playlist-item">
       <div className="info">
@@ -14,7 +15,7 @@ export default function PlaylistItem(props) {
       </div>
       <button
         className="btn btn-insert"
-        onClick={() => props.onInsert(data.title)}
+        onClick={() => props.onInsert(data)}
       >
         Insert
       </button>

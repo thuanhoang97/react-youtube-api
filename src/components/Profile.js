@@ -4,10 +4,11 @@ import React from "react";
 export default class Profile extends React.Component {
 
 	logout () {
-		localStorage.clear('clientId');
-		window.location = '/';
+		window.gapi.auth2.getAuthInstance().signOut().then(() => {
+			localStorage.clear('clientId');
+			window.location = '/';
+		});
 	}
-
 
 	render() {
 		const data = this.props.data;
@@ -19,7 +20,7 @@ export default class Profile extends React.Component {
 				</div>
 				<div className="name">{data.name}</div>
 				<div className="btn-logout" onClick={this.logout}>
-					<i class="fas fa-sign-out-alt fa-2x"></i>
+					<i className="fas fa-sign-out-alt fa-2x"></i>
 				</div>
 			</div>
 		);
